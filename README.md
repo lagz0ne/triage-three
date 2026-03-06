@@ -23,7 +23,8 @@ The more runs you do, the deeper it goes. Each iteration feeds the previous arbi
 ## Install
 
 ```bash
-claude plugin add lagz0ne/triage-three
+claude plugin marketplace add lagz0ne/triage-three
+claude plugin install triage-three
 ```
 
 ## Usage
