@@ -1,0 +1,64 @@
+{
+  "id": "buggy-ts",
+  "name": "Deliberately buggy TypeScript file",
+  "source_file": "test-buggy.ts",
+  "ground_truth": {
+    "real_bugs": [
+      {
+        "id": "off-by-one",
+        "function": "findUser",
+        "description": "Loop condition i <= users.length should be i < users.length, causes TypeError on undefined access",
+        "severity": "critical",
+        "type": "runtime-crash"
+      },
+      {
+        "id": "json-parse-throw",
+        "function": "parseConfig",
+        "description": "JSON.parse throws SyntaxError on malformed input with no error handling",
+        "severity": "high",
+        "type": "unhandled-exception"
+      },
+      {
+        "id": "xss-bypass",
+        "function": "sanitizeInput",
+        "description": "String.replace with string arg only removes first occurrence, case-sensitive, ignores other XSS vectors",
+        "severity": "critical",
+        "type": "security"
+      },
+      {
+        "id": "fetch-no-status-check",
+        "function": "fetchData",
+        "description": "No res.ok check before res.json(), 4xx/5xx responses parsed as valid data or throw",
+        "severity": "high",
+        "type": "silent-failure"
+      }
+    ],
+    "not_bugs": [
+      {
+        "id": "format-price",
+        "function": "formatPrice",
+        "description": "Works correctly, no bug"
+      }
+    ],
+    "debatable": [
+      {
+        "id": "divide-by-zero",
+        "function": "divide",
+        "description": "Returns Infinity/NaN on zero division — standard IEEE 754 behavior, context-dependent",
+        "lean": "not-a-bug"
+      },
+      {
+        "id": "fetch-no-try-catch",
+        "function": "fetchData",
+        "description": "No try-catch for network failures — Promise rejection propagates naturally",
+        "lean": "not-a-bug"
+      },
+      {
+        "id": "any-type",
+        "function": "findUser",
+        "description": "Uses any[] parameter — code quality issue, not runtime bug",
+        "lean": "not-a-bug"
+      }
+    ]
+  }
+}
