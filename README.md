@@ -4,21 +4,19 @@ Adversarial triage with three roles. High-confidence results through tension and
 
 ## Principle
 
-Progress needs a pusher — someone who moves fast, digs deep, and doesn't self-censor. But speed breeds recklessness: vagueness, exaggeration, even fabrication. So the pusher needs a challenger — someone rewarded to find what's wrong, unsound, or outright false.
+Progress needs a pusher — someone who moves fast, digs deep, and doesn't self-censor. But speed breeds recklessness: vagueness, exaggeration, even fabrication. So the pusher needs a challenger — someone who questions through Socratic interrogation, exposing weaknesses not by assertion but by asking the questions that reveal whether a finding holds up.
 
-This creates tension. Both sides stretch. The pusher finds more. The challenger catches more. But raw tension is noise. A third role — the arbiter — resolves it. The arbiter only gets rewarded for truth that survived the gauntlet. What comes out is refined, verified, and close to the final answer.
+This creates tension. The pusher proposes. The challenger asks: *"What evidence proves this? What would disprove it? Is this the root cause or a symptom? What's the alternative explanation?"* Both sides stretch. But raw tension is noise. A third role — the arbiter — resolves it, emitting only truth that survived the gauntlet.
 
-**Three roles, one loop:**
+**Three roles, multiple angles:**
 
 ```
-[I] Pusher    →  generates findings aggressively
-[II] Challenger →  tears apart [I]'s output, catches errors
-[III] Arbiter   →  emits only what survived both sides
+[I] Pusher      →  generates findings from a specific angle
+[II] Challenger  →  Socratically questions [I]'s output
+[III] Arbiter    →  synthesizes across all pairs, emits verified truth
 ```
 
-Each role has opposing incentives. The pusher is rewarded for depth. The challenger is rewarded for catching flaws. The arbiter is rewarded only for verified truth — including a false result is heavily penalized.
-
-The more runs you do, the deeper it goes. Each iteration feeds the previous arbiter output back into the pusher, who goes deeper into unresolved areas.
+Multiple Pusher–Challenger pairs can explore different angles of the same problem (e.g., correctness + security + performance). The Arbiter synthesizes across all pairs, catching cross-angle patterns and resolving conflicts. Everything works in threes: three roles, up to three angles, up to three runs.
 
 ## Install
 
@@ -30,7 +28,7 @@ claude plugin install triage-three
 ## Usage
 
 ```
-/triage-three <goal> [style=...] [runs=N] [depth=1-3]
+/triage-three <what to triage and what you're looking for> [style=...]
 ```
 
 **Examples:**
@@ -39,16 +37,16 @@ claude plugin install triage-three
 /triage-three find security bugs in src/auth/
 /triage-three review this PR for correctness
 /triage-three analyze the error handling in lib/
-/triage-three audit the API design style=wide-funnel depth=2
-/triage-three find performance issues runs=2
+/triage-three audit the API design style=wide-funnel
+/triage-three find performance issues in the hot path
 ```
 
 The command will:
-1. Suggest three roles based on your goal — you confirm or refine
+1. Infer roles from your goal and calibrate effort (angles, depth) from the query's scope and stakes
 2. Scope the target files
-3. Run the adversarial loop
-4. Score itself with an LLM-as-Judge
-5. Present only verified findings with a quality scorecard
+3. Run Pusher–Challenger pairs (in parallel across angles)
+4. Synthesize with the Arbiter across all angles
+5. Present only verified findings with cross-angle insights
 
 ## Style Presets
 
@@ -62,16 +60,17 @@ All presets were eval-tested against real CVEs (jsonwebtoken v8.5.1) and synthet
 | `paranoid` | Assume everything is broken | Disprove every finding | Strict (zero FP) | Security audits. Highest token cost. |
 | `max-tension` | Assume everything is broken | Disprove every finding | Conservative | Deep search with strong filtering. |
 
-## Parameters
+## Effort Calibration
 
-| Parameter | Default | Description |
-|---|---|---|
-| `style` | `measured` | Prompt style preset (see above) |
-| `runs` | `1` | Iterations. Each feeds prior output back in. |
-| `depth` | `1` | 1=surface, 2=thorough, 3=exhaustive |
-| `breadth_i` | `1` | Parallel pusher agents |
-| `breadth_ii` | `1` | Parallel challenger agents |
-| `breadth_iii` | `1` | Parallel arbiter agents |
+Effort is inferred from your query — no parameter tables to fill out.
+
+| Effort | Angles | Depth | Triggered by |
+|---|---|---|---|
+| **Light** | 1 | surface | Focused question, single file, low stakes |
+| **Standard** | 3 | thorough | Most tasks. Module-level, multiple concerns. |
+| **Deep** | 3 | exhaustive | Critical systems, security audits, complex problems |
+
+You can always override by passing `style=...` for prompt presets. Everything else is calibrated from context.
 
 ## Use Cases
 
