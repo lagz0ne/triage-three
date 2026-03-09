@@ -1,6 +1,6 @@
 {
   "name": "triage-three",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Adversarial triage with three roles: Pusher, Challenger, Arbiter. Produces high-confidence results through tension and refinement.",
   "author": {
     "name": "lagz0ne"
